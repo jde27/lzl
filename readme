@@ -1,8 +1,22 @@
-# lzl
-lazy latex
+lzl (lazy latex) is a simple markup designed with two purposes in
+mind:
+
+1. to reduce the amount you need to type into a LaTeX file,
+
+2. to allow export to other formats such as HTML.
+
+Call it with
+
+$ lzl.py filename tex [article|book|...]
+
+or
+
+$ lzl.py filename html
 
 The syntax of Lazy LaTeX (lzl) is very simple. You mostly just write
-in LaTeX, except for a few shortcuts.
+in LaTeX, except for a few shortcuts. Obviously if you try and export
+some fancy LaTeX to HTML it will fail, but basic input should
+translate into HTML (including equations).
 
 EXAMPLE 1
 
