@@ -1,0 +1,97 @@
+# lzl
+lazy latex
+
+The syntax of Lazy LaTeX (lzl) is very simple. You mostly just write
+in LaTeX, except for a few shortcuts.
+
+EXAMPLE 1
+
+# Theorem thm:pythag Pythagoras's theorem
+  \[a^2+b^2=c^2\]
+
+====> LaTeX:
+
+\begin{Theorem}[Pythagoras's theorem]
+\label{thm:pythag}
+\[a^2+b^2=c^2.\]
+\end{Theorem}
+
+====> HTML:
+
+<div class="Theorem" id="thm:pythag">(Pythagoras's theorem)
+\[a^2+b^2=c^2\]
+</div>
+
+(As usual, you can use any environment name you want as long as you
+define it in the head of your LaTeX document or in your CSS.)
+
+EXAMPLE 2:
+
+! An item
+  - A subitem
+  - Another subitem
+! Another item
+  ! A numbered subitem
+- An unnumbered item
+
+====> LaTeX:
+
+\begin{enumerate}
+  \item An item
+  \begin{itemize}
+    \item A subitem
+    \item Another subitem
+  \end{itemize}
+  \item Another item
+  \begin{enumerate}
+    \item A numbered subitem
+  \end{enumerate}
+\end{enumerate}
+\begin{itemize}
+  \item An unnumbered item
+\end{itemize}
+
+====> HTML:
+
+<ol>
+  <li>An item
+  <ul>
+    <li>A subitem
+    <li>Another subitem
+  </ul>
+  <li>Another item
+  <ul>
+    <li>A numbered subitem
+  </ul>
+</ol>
+<ul>
+  <li>An unnumbered item
+</ul>
+
+EXAMPLE 3:
+
+@ title The title of the document
+@ author Me
+@tex include aux-tex-file
+@html include aux-html-file
+
+====> LaTeX:
+
+\title{The title of the document}
+\author{Me}
+\include{aux-tex-file}
+
+====> HTML:
+
+<title>The title of the document</title>
+<meta name="author" content="Me"/>
+contents of aux-html-file inserted verbatim
+
+Note: lzl keeps writing header stuff while the first character of the
+line is @. As soon as that stops, it moves on to parsing the body of
+the document. To maximise readability, I put all the LaTeXy
+\usepackage/\newcommand instructions in a separate file which I then
+include using @tex include aux-tex-file, and all HTML head stuff like
+<link rel="stylesheet"...> in a separate text file which gets includes
+verbatim using @html include aux-html-file. Of course, this
+aux-html-file should probably include the relevant MathJax script...

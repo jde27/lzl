@@ -1,2 +1,0 @@
-# lzl
-lazy latex
