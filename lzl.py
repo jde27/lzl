@@ -160,7 +160,10 @@ def write_head(words):
 
 def write_body(words,new_depth,current_depth):
     if not words: # handle empty lines
-        return ['\n']
+        if mode=='html':
+            return ['<p>\n']
+        else:
+            return ['\n']
     else:
         if new_depth<current_depth: # if we have excess environments open...
             # close all but the last excess environment
@@ -200,42 +203,88 @@ def write_body(words,new_depth,current_depth):
             # just convert the line into LaTeX and write to tex_file
             return make_line(words)
         
-def write_data(data):
+def handle_hyperlinks():
+    output=[]
+    raw_file=[]
+    parsed_file=[]
     with open(in_file) as f:
-        in_header=True
         for line in f:
-            if in_header:
-                if line[0]=='@':
-                    data+=write_head(line.split())
-                else:
-                    in_header=False
-                    if mode=='html':
-                        open_environments.append('body')
-                    data+=end_head_line
+            if mode != 'html':
+                output+=[line]
             else:
-                # number of environments which are open
-                current_depth=len(open_environments)
-                always_open={'tex':1, # always in 'document'
-                             'html':2} # always in 'html','body'
-                # number of environments which _should_ be open:
-                new_depth=count_tabs(line)+always_open[mode]
-                data+=write_body(line.split(),new_depth,current_depth)
+                for char in line:
+                    raw_file+=[char]
 
-        # Once we reach the end of the document, close all open
-        # environments
-        for i in range(0,len(open_environments)):
-            closing=open_environments.pop()
-            new_lines={'tex':['\end{'+closing+'}']}
-            if closing in ['ul','ol','body','html']:
-                new_lines['html']=['</'+closing+'>']
+    if mode != 'html':
+        return output
+    
+    flag=0
+    for char in raw_file:
+        if flag == 0 and char != '[':
+            parsed_file+=[char]
+        elif flag == 0 and char == '[':
+            flag = 1    # There may be a link about to start...
+            parsed_file+=[char]
+        elif flag == 1 and char != '[':
+            flag = 0    # Ach! False alarm
+            parsed_file+=[char]
+        elif flag == 1 and char == '[':
+            flag = 2    # Link has started
+            parsed_file.pop()
+            parsed_file.extend(list('<a href="'))
+        elif flag == 2 and char != ']':
+            parsed_file+=[char] # Inside link
+        elif flag == 2 and char == ']':
+            parsed_file.extend(list('">'))
+            flag = 3 # Passing into link text
+        elif flag == 3 and char == '[':
+            flag = 4
+        elif flag == 4 and char != ']':
+            parsed_file+=[char] # Inside link text
+        elif flag == 4 and char == ']':
+            flag = 5 # Link text has passed
+        elif flag == 5 and char == ']':
+            flag = 6 # Whole link has passed
+            parsed_file.extend('</a>')
+            flag = 0
+
+    return ''.join(parsed_file).splitlines(True)
+
+def write_data(data,parsed_output):
+    in_header=True
+    for line in parsed_output:
+        if in_header:
+            if line[0]=='@':
+                data+=write_head(line.split())
             else:
-                new_lines['html']=['</div>']
-            data+=new_lines[mode]
-        return data
+                in_header=False
+                if mode=='html':
+                    open_environments.append('body')
+                data+=end_head_line
+        else:
+            # number of environments which are open
+            current_depth=len(open_environments)
+            always_open={'tex':1, # always in 'document'
+                         'html':2} # always in 'html','body'
+            # number of environments which _should_ be open:
+            new_depth=count_tabs(line)+always_open[mode]
+            data+=write_body(line.split(),new_depth,current_depth)
+
+    # Once we reach the end of the document, close all open
+    # environments
+    for i in range(0,len(open_environments)):
+        closing=open_environments.pop()
+        new_lines={'tex':['\end{'+closing+'}']}
+        if closing in ['ul','ol','body','html']:
+            new_lines['html']=['</'+closing+'>']
+        else:
+            new_lines['html']=['</div>']
+        data+=new_lines[mode]
+    return data
     
 
 with open(out_file, 'w') as f:
-    for item in write_data(first_line):
+    for item in write_data(first_line,handle_hyperlinks()):
         f.write("%s\n" % item)
 
 if mode=='tex':
