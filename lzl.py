@@ -52,8 +52,8 @@ The "main" program which runs when the program is called opens out_file and writ
 import sys
 import subprocess
 
-doc_class='article'
 mode='tex'
+doc_class='article'
 in_file=sys.argv[1]
 if len(sys.argv)>2:
     mode=sys.argv[2]
@@ -68,6 +68,10 @@ elif mode=='html':
     open_environments=['html']
     first_line=['<html>','<head>']
     end_head_line=['</head>','<body>']
+    if doc_class=='blog':
+        with open('./aux/headline') as headlines:
+            for headline in headlines:
+                end_head_line.append(headline)
 out_file=in_file[:-3]+mode
 
 def count_tabs(line):
@@ -250,6 +254,58 @@ def handle_hyperlinks():
 
     return ''.join(parsed_file).splitlines(True)
 
+def handle_tikz(lzlist):
+    if mode=='tex':
+        return lzlist
+    elif mode=='html':
+        tikzmode=0
+        img_index=-1
+        imgs=[]
+        output=[]
+        current_depth=0
+        for line in lzlist:
+            if tikzmode==0:
+                if line.split()[0:2]==['#','tikzpicture']:
+                    current_depth=count_tabs(line)
+                    tikzmode=1
+                    img_index+=1
+                    img_init=['\documentclass[tikz]{standalone}',
+                                 #'\include{tikzhead}',
+                                 '\\begin{document}',
+                                 '\\begin{tikzpicture}']
+                    if len(line.split())>=2:
+                        img_init.append(line.split()[2:])
+                    imgs.append(img_init)
+                else:
+                    output.append(line)
+            else:
+                if count_tabs(line)<=current_depth:
+                    imgs[img_index].extend(['\end{tikzpicture}',
+                                            '\end{document}'])
+                    out_line='<center><img src="./img/'+in_file[:-4]+str(img_index)+'.jpg"/></center>'
+                    output.extend([out_line,line])
+                    tikzmode=0
+                else:
+                    if line.split():
+                        imgs[img_index].append(line.strip())
+        if tikzmode==1:
+            imgs[img_index].extend(['\end{tikzpicture}',
+                                    '\end{document}'])
+            out_line='<img src="./img/'+in_file[:-4]+str(img_index)+'.jpg"/>'
+            output.extend([out_line])
+
+        for img in imgs:
+            img_root=in_file[:-4]+str(imgs.index(img))
+            img_file=img_root+'.tex'
+            destination_pdf=img_root+'.pdf'
+            destination_jpg='./img/'+img_root
+            with open(img_file,'w') as f:
+                for tikz in img:
+                    f.write("%s\n" % tikz)
+            subprocess.run(["pdflatex",img_file,destination_pdf])
+            subprocess.run(["pdftocairo","-singlefile","-jpeg",destination_pdf,destination_jpg])
+        return output
+                
 def write_data(data,parsed_output):
     in_header=True
     for line in parsed_output:
@@ -275,8 +331,14 @@ def write_data(data,parsed_output):
     for i in range(0,len(open_environments)):
         closing=open_environments.pop()
         new_lines={'tex':['\end{'+closing+'}']}
-        if closing in ['ul','ol','body','html']:
+        if closing in ['ul','ol','html']:
             new_lines['html']=['</'+closing+'>']
+        elif closing in ['body']:
+            new_lines['html']=[]
+            with open('./aux/endline') as endlines:
+                for endline in endlines:
+                    new_lines['html'].append(endline)
+            new_lines['html'].append('</'+closing+'>')
         else:
             new_lines['html']=['</div>']
         data+=new_lines[mode]
@@ -284,7 +346,7 @@ def write_data(data,parsed_output):
     
 
 with open(out_file, 'w') as f:
-    for item in write_data(first_line,handle_hyperlinks()):
+    for item in write_data(first_line,handle_tikz(handle_hyperlinks())):
         f.write("%s\n" % item)
 
 if mode=='tex':
