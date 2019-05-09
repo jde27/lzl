@@ -274,7 +274,7 @@ def handle_tikz(lzlist):
                                  '\\begin{document}',
                                  '\\begin{tikzpicture}']
                     if len(line.split())>=2:
-                        img_init.append(line.split()[2:])
+                        img_init.extend(line.split()[2:])
                     imgs.append(img_init)
                 else:
                     output.append(line)
