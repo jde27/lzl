@@ -335,9 +335,10 @@ def write_data(data,parsed_output):
             new_lines['html']=['</'+closing+'>']
         elif closing in ['body']:
             new_lines['html']=[]
-            with open('./aux/endline') as endlines:
-                for endline in endlines:
-                    new_lines['html'].append(endline)
+            if doc_class=='blog':
+                with open('./aux/endline') as endlines:
+                    for endline in endlines:
+                        new_lines['html'].append(endline)
             new_lines['html'].append('</'+closing+'>')
         else:
             new_lines['html']=['</div>']
