@@ -282,7 +282,9 @@ def handle_tikz(lzlist):
                 if count_tabs(line)<=current_depth:
                     imgs[img_index].extend(['\end{tikzpicture}',
                                             '\end{document}'])
-                    out_line='<center><img src="./img/'+in_file[:-4]+str(img_index)+'.jpg"/></center>'
+                    out_line=''.join([' ' for spaces in range(0,current_depth*tab_length)])+\
+                              '<center><img src="./img/'+in_file[:-4]+\
+                              str(img_index)+'.jpg"/></center>'
                     output.extend([out_line,line])
                     tikzmode=0
                 else:
