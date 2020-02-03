@@ -270,9 +270,10 @@ def handle_tikz(lzlist):
                     tikzmode=1
                     img_index+=1
                     img_init=['\documentclass[tikz]{standalone}',
-                                 #'\include{tikzhead}',
-                                 '\\begin{document}',
-                                 '\\begin{tikzpicture}']
+                              '\\usepackages{amsmath}',
+                              #'\include{tikzhead}',
+                              '\\begin{document}',
+                              '\\begin{tikzpicture}']
                     if len(line.split())>=2:
                         img_init.extend(line.split()[2:])
                     imgs.append(img_init)
