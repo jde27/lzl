@@ -101,6 +101,17 @@ EXAMPLE 3:
 <meta name="author" content="Me"/>
 contents of aux-html-file inserted verbatim
 
+EXAMPLE 4:
+
+# center
+  # tikzpicture alt This is a circle and a line
+    \draw (0,0) circle[radius=2];
+    \draw (0,0) -- (3,2);
+
+====> HTML:
+
+Produces a jpg file using tikz/LaTeX and embeds it as an img with an alt tag
+
 Note: lzl keeps writing header stuff while the first character of the
 line is @. As soon as that stops, it moves on to parsing the body of
 the document. To maximise readability, I put all the LaTeXy
