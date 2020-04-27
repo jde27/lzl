@@ -271,7 +271,7 @@ def handle_tikz(lzlist):
                     tikzmode=1
                     img_index+=1
                     img_init=['\documentclass[tikz]{standalone}',
-                              '\\usepackages{amsmath}',
+                              '\\usepackage{amsmath}',
                               #'\include{tikzhead}',
                               '\\begin{document}',
                               '\\begin{tikzpicture}']
