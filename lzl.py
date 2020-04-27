@@ -261,6 +261,7 @@ def handle_tikz(lzlist):
         tikzmode=0
         img_index=-1
         imgs=[]
+        alt_text = []
         output=[]
         current_depth=0
         for line in lzlist:
@@ -274,8 +275,14 @@ def handle_tikz(lzlist):
                               #'\include{tikzhead}',
                               '\\begin{document}',
                               '\\begin{tikzpicture}']
-                    if len(line.split())>=2:
-                        img_init.extend(line.split()[2:])
+                    if len(line.split())>2:
+                        if line.split()[2] == "alt":
+                            alt_text += [' '.join(line.split()[3:])]
+                        else:
+                            alt_text += ["no alt text yet"]
+                            img_init.extend(line.split()[2:])
+                    else:
+                        alt_text += ["no alt text yet"]
                     imgs.append(img_init)
                 else:
                     output.append(line)
@@ -285,7 +292,8 @@ def handle_tikz(lzlist):
                                             '\end{document}'])
                     out_line=''.join([' ' for spaces in range(0,current_depth*tab_length)])+\
                               '<center><img src="./img/'+in_file[:-4]+\
-                              str(img_index)+'.jpg"/></center>'
+                              str(img_index)+'.jpg" '+\
+                              'alt="'+str(alt_text[img_index])+'"/></center>'
                     output.extend([out_line,line])
                     tikzmode=0
                 else:
@@ -348,10 +356,10 @@ def write_data(data,parsed_output):
         data+=new_lines[mode]
     return data
     
+if __name__ == "__main__":
+    with open(out_file, 'w') as f:
+        for item in write_data(first_line,handle_tikz(handle_hyperlinks())):
+            f.write("%s\n" % item)
 
-with open(out_file, 'w') as f:
-    for item in write_data(first_line,handle_tikz(handle_hyperlinks())):
-        f.write("%s\n" % item)
-
-if mode=='tex':
-    subprocess.run(["pdflatex",out_file])
+    if mode=='tex':
+        subprocess.run(["pdflatex",out_file])
