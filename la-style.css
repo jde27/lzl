@@ -1,0 +1,148 @@
+.date{
+    color:#666666;
+}
+
+img{
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
+.ccc{
+    color:#666666;
+}
+
+pre{
+    padding-left:3em;
+    background:#CCC;
+}
+
+.pre{
+    font-family: "Courier New", monospace;
+    display:block;
+    type:text/plain;
+    white-space: pre;
+    padding-left:3em;
+    background:#CCC;
+}
+
+.ccbysa{
+    background-color:#2B547E;
+    color:white;
+    padding:1mm;
+}
+
+.content{
+    padding-left:10%;
+    padding-right:10%;
+}
+
+a{
+    color:#2B547E;
+}
+
+a:hover {
+  color:#2A7D54;
+}
+
+/* selected link */
+a:active {
+  color: yellow;
+}
+
+a:visited{
+    color:#7D2A54;
+}
+
+hr.tg{
+    border: 0;
+    height: 4em;
+    background: #2B547E;
+    /*background-image: -webkit-linear-gradient(right, #4682b4, #4682b4, #fff);
+    background-image: -moz-linear-gradient(right, #4682b4, #4682b4, #fff);
+    background-image: -ms-linear-gradient(right, #4682b4, #4682b4, #fff);
+    background-image: -o-linear-gradient(right, #4682b4, #4682b4, #fff);*/
+    text-align:center;
+}
+/*
+hr.style-eight {
+    overflow: visible; /* For IE 
+    padding: 0;
+    border: none;
+    border-top:  double #0174DF;
+    color: #333;
+    text-align: center;
+}*/
+hr.tg:after {
+    content: "Linear Algebra";
+    display: inline-block;
+    position: relative;
+    top: 0.1em;
+    font-size: 3em;
+    padding: 0 0.25em;
+    color:white;
+}
+
+.Theorem{
+    display:block;
+    margin-left:10px;
+    margin-bottom:20px;
+    font-style:normal;
+}
+.Theorem:before{
+    content:"Theorem.\00a0\00a0";
+    float:left;
+    font-weight:bold;
+}
+
+.exm{
+    display:block;
+    margin-left:10px;
+    margin-bottom:20px;
+    font-style:normal;
+}
+.exm:before{
+    content:"Example.\00a0\00a0";
+    float:left;
+    font-weight:bold;
+}
+
+.Definition{
+    display:block;
+    margin-left:10px;
+    margin-bottom:20px;
+    font-style:normal;
+}
+.Definition:before{
+    content:"Definition.\00a0\00a0";
+    float:left;
+    font-weight:bold;
+}
+.Lemma{
+    display:block;
+    margin-left:10px;
+    margin-bottom:20px;
+    font-style:normal;
+}
+.Lemma:before{
+    content:"Lemma.\00a0\00a0";
+    float:left;
+    font-weight:bold;
+}
+
+.proof{
+    display:block;
+    margin-left:10px;
+    margin-bottom:30px;
+    font-style:normal;
+}
+.proof:before{
+    content:'Proof.\00a0\00a0';
+    float:left;
+    font-weight:bold;
+}
+.proof:after{
+    content:"\25FC";
+    float:right;
+}

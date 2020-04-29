@@ -52,6 +52,9 @@ The "main" program which runs when the program is called opens out_file and writ
 import sys
 import subprocess
 
+# set these variables to your preferred values
+img_location = './img/' # location of image files relative to HTML files
+
 mode='tex'
 doc_class='article'
 in_file=sys.argv[1]
@@ -291,7 +294,7 @@ def handle_tikz(lzlist):
                     imgs[img_index].extend(['\end{tikzpicture}',
                                             '\end{document}'])
                     out_line=''.join([' ' for spaces in range(0,current_depth*tab_length)])+\
-                              '<center><img src="./img/'+in_file[:-4]+\
+                              '<center><img src="'+img_location+in_file[:-4]+\
                               str(img_index)+'.jpg" '+\
                               'alt="'+str(alt_text[img_index])+'"/></center>'
                     output.extend([out_line,line])
@@ -302,14 +305,14 @@ def handle_tikz(lzlist):
         if tikzmode==1:
             imgs[img_index].extend(['\end{tikzpicture}',
                                     '\end{document}'])
-            out_line='<img src="./img/'+in_file[:-4]+str(img_index)+'.jpg"/>'
+            out_line='<img src="'+img_location+in_file[:-4]+str(img_index)+'.jpg"/>'
             output.extend([out_line])
 
         for img in imgs:
             img_root=in_file[:-4]+str(imgs.index(img))
             img_file=img_root+'.tex'
             destination_pdf=img_root+'.pdf'
-            destination_jpg='./img/'+img_root
+            destination_jpg=img_location+img_root
             with open(img_file,'w') as f:
                 for tikz in img:
                     f.write("%s\n" % tikz)

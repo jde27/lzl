@@ -1,0 +1,162 @@
+@ include la-head
+@ title 01. Matrices
+@ author Jonny Evans
+
+* 01. Matrices
+
+Below the video you will find accompanying notes.
+
+# center
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/AXcWWFaJl5g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+- [[./02_examples.html][Next video]] <b>02. Examples</b>.
+- [[./index.html#index][Index of all lectures]].
+
+* Notes
+
+** Vectors in the plane
+
+<i>(0.00)</i> A vector is an arrow in the plane (later we'll deal with
+vectors in higher-dimensional spaces). We encode this arrow as a pair
+of numbers \(\begin{pmatrix} x \\ y \end{pmatrix}\). The number \(x\)
+tells us how far to the right the arrow points; the number \(y\) tells
+us how far upwards it points. If the arrow points to the <i>left</i>
+then \(x\) is negative; if it points downwards then \(y\) is negative.
+
+<i>(1.00)</i> Can you match up the vectors \(\begin{pmatrix}x \\ y
+\end{pmatrix}\) with those in the diagram? (Some of the vectors are
+not depicted).
+
+# center
+  # tikzpicture alt Vectors in the plane: (A) points 1 left 1 down, (B) points 1 horizontally right, (C) points 1 vertically up (D) points 2 right and 1 up
+    \draw[very thick,->] (0,0) -- (2,0);
+    \draw[very thick,->] (0,0) -- (0,2);
+    \draw[very thick,->] (0,0) -- (-2,-2);
+    \draw[very thick,->] (0,0) -- (4,2);
+
+\begin{gather*}
+\begin{pmatrix} 1 \\ 2\end{pmatrix},\qquad
+\begin{pmatrix} 0 \\ 1\end{pmatrix},\qquad
+\begin{pmatrix} 1 \\ 1\end{pmatrix},\\
+\begin{pmatrix} 1 \\ 0\end{pmatrix},\qquad
+\begin{pmatrix} -1 \\ -1\end{pmatrix},\qquad
+\begin{pmatrix} 2 \\ 1\end{pmatrix},\qquad
+\end{gather*}
+
+(answers at <i>(2.08)</i>).
+
+<i>(3.35)</i> A lot of this module will focus on the interplay between
+algebra (like column vectors) and geometry (like arrows in the plane).
+
+# center
+  # tikzpicture alt A vector in the plane
+    \draw[very thick,->] (0,0) -- (4,2);
+    \draw[dotted] (0,0) -- (4,0) -- (4,2);
+    \node at (0.9,0.2) {\(\theta\)};
+    \draw (1.2,0) arc[radius=1.2,start angle=0,end angle=27];
+    \node at (1.2,1) [above] {\(|v|=\sqrt{x^2+y^2}\)};
+    \node at (2,0) [below] {\(x=|v|\cos\theta\)};
+    \node at (4,1) [right] {\(y=|v|\sin\theta\)};
+
+Suppose \(v=\begin{pmatrix}x \\ y\end{pmatrix}\) is a vector. What is
+it's length? By Pythagoras's theorem, it's \(\sqrt{x^2+y^2}\). I'll
+write this as \(|v|\), which you can read out loud as "norm
+\(v\)". The angle that \(v\) makes with the horizontal is \(\theta =
+\arctan(y/x)\) (by trigonometry). If we want to write \(x\) and \(y\)
+in terms of \(|v|\) and \(\theta\), we get (again, using
+trigonometry):
+\[x=|v|\cos\theta,\qquad y=|v|\sin\theta.\]
+So \(v=\begin{pmatrix}|v|\cos\theta
+\\ |v|\sin\theta\end{pmatrix}\). 
+
+** 2-by-2 matrices
+
+<i>(6.15)</i> What happens if I rotate \(v\) by an angle \(\phi\)
+anticlockwise? We get a new vector \(w\), which we can express in
+terms of \(v\) and \(\phi\).
+
+# center 
+  # tikzpicture alt A vector v making an angle theta with x-axis and w (rotated anticlockwise) by phi
+    \draw[very thick,->] (0,0) -- (4,2);
+    \draw[dotted] (0,0) -- (4,0) -- (4,2);
+    \node at (0.9,0.2) {\(\theta\)};
+    \draw (1.2,0) arc[radius=1.2,start angle=0,end angle=27];
+    \node at (2,1) [above] {\(v\)};
+    \draw[very thick,->] (0,0) -- (2,4);
+    \node at (0.6,0.7) {\(\phi\)};
+    \draw (27:1.2) arc[radius=1.2,start angle=27,end angle=63];
+    \node at (1,2) [left] {\(w\)};
+
+Rotation preserves lengths, so \(|w|=|v|\).
+
+<i>(8.07)</i> The angle that \(w\) makes with the horizontal is
+\(\theta+\phi\). Therefore \[w=\begin{pmatrix} |v|\cos(\theta+\phi)
+\\ |v|\sin(\theta+\phi)\end{pmatrix}.\]
+
+<i>(9.20)</i> We can expand this using the trigonometric addition
+formulae: \[w=\begin{pmatrix} |v|\cos(\theta+\phi)
+\\ |v|\sin(\theta+\phi)\end{pmatrix}=\begin{pmatrix}|v|\cos\theta\cos\phi-|v|\sin\theta\sin\phi
+\\ |v|\sin\theta\cos\phi+|v|\cos\theta\sin\phi\end{pmatrix}.\]
+
+<i>(10.27)</i> Using \(x=|v|\cos\theta\) and \(y=|v|\sin\theta\), we
+get \[w=\begin{pmatrix} x\cos\phi - y \sin\phi \\ x\sin\phi +
+y\cos\phi\end{pmatrix}.\]
+
+<i>(11.34)</i> This expresses \(w\) in terms of the original vector
+\(v=\begin{pmatrix} x \\ y\end{pmatrix}\) and the angle \(\phi\) of
+rotation. We now invent a piece of notation which separates out the
+dependence of \(w\) on \(v\) from its dependence on \(\phi\): we write
+\[w=\begin{pmatrix}\cos\phi & -\sin\phi \\ \sin\phi &
+\cos\phi\end{pmatrix}\begin{pmatrix} x \\ y\end{pmatrix}.\] You can
+just think of this as a shorthand for \(\begin{pmatrix} x\cos\phi - y
+\sin\phi \\ x\sin\phi + y\cos\phi\end{pmatrix}\), keeping track of
+where all the coefficients sit.
+
+<i>(13.00)</i> More generally, given a 2-by-2 array of numbers
+\(M=\begin{pmatrix} a & b \\ c & d\end{pmatrix}\) and a vector
+\(v=\begin{pmatrix} x \\ y\end{pmatrix}\), we define the product
+\[Mv=\begin{pmatrix} a & b \\ c & d\end{pmatrix}\begin{pmatrix} x
+\\ y\end{pmatrix}:=\begin{pmatrix} ax+by \\ cx+dy\end{pmatrix}.\] This
+defines the <i>action of a matrix on a vector</i>. This notation
+completely separates out the rotation (\(M\)) from the vector we
+started with (\(v\)).
+
+<i>(15.09)</i> Now we don't have to limit ourselves to rotations: any
+matrix \(\begin{pmatrix} a & b \\ x & d\end{pmatrix}\) defines a
+geometric transformation of the plane. This is the transformation
+\[\begin{pmatrix} x \\ y
+\end{pmatrix}\mapsto\begin{pmatrix}ax+by\\cx+dy\end{pmatrix}.\] We'll
+see lots of examples in the next video (rotations, reflections,
+shears,...).
+
+** Mnemonic
+
+<i>(16.34)</i> How do you remember the formula for a matrix acting on
+a vector? The mnemonic I like is as follows. To get the first entry of
+\(Av\), you ``multiply the top row of \(A\) into \(v\)'', that is you
+perform the multiplications \(ax\) and \(by\) (working across the top
+row of \(A\) and down the column of \(v\)) and sum them.
+
+# center
+  # tikzpicture alt Diagram illustrating the mnemonic for the first entry
+    \node at (0,0) {\(\begin{pmatrix} a & b \\ c & d\end{pmatrix}\begin{pmatrix} x \\ y\end{pmatrix}\)};
+    \draw[->] (-0.8,0.2) -- (0.1,0.2);
+    \draw[->] (0.65,0.4) -- (0.65,-0.5);
+    \node at (2.5,0) {\(=\quad ax+by\)};
+
+To get the second entry, you multiply the second row of \(A\) into
+\(v\).
+
+# center
+  # tikzpicture alt Diagram illustrating the mnemonic for the second entry
+    \node at (0,0) {\(\begin{pmatrix} a & b \\ c & d\end{pmatrix}\begin{pmatrix} x \\ y\end{pmatrix}\)};
+    \draw[->] (-0.8,-0.22) -- (0.1,-0.22);
+    \draw[->] (0.65,0.4) -- (0.65,-0.5);
+    \node at (2.5,0) {\(=\quad cx+dy\)};
+    
+In the next video, we'll see lots of examples of transformations of
+the plane coming from 2-by-2 matrices.
+
+* Navigation
+
+- [[./02_examples.html][Next video]]: <b>02. Examples</b>.
+- [[./index.html#index][Index of all lectures]].

@@ -18,6 +18,36 @@ in LaTeX, except for a few shortcuts. Obviously if you try and export
 some fancy LaTeX to HTML it will fail, but basic input should
 translate into HTML (including equations).
 
+There is an example input file (01_matrices.lzl) in the repository
+(this makes use of the file la-head, also in the repository). Before
+you run this example you should make sure you have a subdirectory to
+store the images output by TikZ and change the variable img_location
+in lzl.py to the relative path to this subdirectory. The default is
+'./img/' but if you're not on Linux/Mac then you probably want
+something with Windows-slashes i.e. \
+
+To any Windows users:
+
+I have succeeded in getting lzl (and other python scripts that require
+arguments passing to them) to work on Windows machines, but only after
+I installed Python in a specific way. Namely, on Windows 10, if you
+get a cmd terminal open (e.g. press Win + R and type cmd) then type
+python, it will take you to the "Microsoft Store" from which you can
+install the latest version of Python. Then, back in the cmd terminal
+you can just type
+
+python lzl.py 01_matrices.lzl html
+
+to run lzl on the example file.
+
+If you installed Python direct from a website then I think you
+probably need to play around with the path environment variable to get
+this to work smoothly.
+
+
+
+Here are some further examples of lzl syntax.
+
 EXAMPLE 1
 
 # Theorem thm:pythag Pythagoras's theorem
